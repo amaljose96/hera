@@ -143,7 +143,10 @@ async function getSearchResults(searchParameters) {
               if (
                 satisfiesSearchParameters(searchParameters, logBlock[traceId])
               ) {
-                searchResults[traceId] = formatAction(logBlock[traceId],searchParameters);
+                searchResults[traceId] = formatAction(
+                  logBlock[traceId],
+                  searchParameters
+                );
               }
             });
           });

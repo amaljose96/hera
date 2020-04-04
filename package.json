@@ -1,5 +1,5 @@
 {
-  "name": "hera",
+  "name": "hera-monitor",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,8 +15,5 @@
   "bugs": {
     "url": "https://github.com/amaljose96/hera/issues"
   },
-  "homepage": "https://github.com/amaljose96/hera#readme",
-  "dependencies": {
-    "axios": "^0.19.2"
-  }
+  "homepage": "https://github.com/amaljose96/hera#readme"
 }
