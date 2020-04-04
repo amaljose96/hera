@@ -9,11 +9,14 @@ function Hera(app,axios,config){
   return attachHeraToAxios(axios,config.axiosConfig);
 }
 
-function attachHeraToExpress(app){
+function attachHeraToExpress(app,config){
   app.use(heraInterceptor);
   app.use("/hera",(req,res)=>{
     res.send("Hera's dedicated");
   });
+  Object.keys(config).forEach(key=>{
+    process.env["HERA_"+key]=config[key]
+  })
   app.get("/hera-data-source",require('./packageFiles/search'));
 }
 function attachHeraToAxios(axios,extraAxiosConfig){
