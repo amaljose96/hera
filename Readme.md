@@ -123,11 +123,11 @@ attachHeraToExpress(app, {
 1. Injection : A trace id is formed when the Node layer recieves a request from UI. This is used till the call is made to API. Data is entered to a file asynchronously with each call.
 
 Events are thrown are:
-    1. Node Call Initiated : When the call reaches the express server
-    2. API Call Initiated : When axios calls an external endpoint.
-    3. API Call Completed : When axios successfully completes a call.
-    4. API Call Failed : When axios call fails.
-    5. Node Call Completed : When express successfully returns data.
-    6. Node Call Failed : When express sends an error back.
+* Node Call Initiated : When the call reaches the express server
+* API Call Initiated : When axios calls an external endpoint.
+* API Call Completed : When axios successfully completes a call.
+* API Call Failed : When axios call fails.
+* Node Call Completed : When express successfully returns data.
+* Node Call Failed : When express sends an error back.
 
 2. Action Retrieval : An action is defined as every call that comes from UI to Node. This involves a NODE_INITIATED, several API_INITIATED, API_COMPLETEs and a NODE_COMPLETE. A trace id is unique for an action.
