@@ -117,17 +117,3 @@ attachHeraToExpress(app, {
 ```
  * historyLimit : This specifies how many days of logs should be retained. By default, this is 7.
  * callLife : This specifies how long Hera would wait for a call to be resolved (in ms) before its discarded. By default, this is 10800000. 
-
-
-## Design
-1. Injection : A trace id is formed when the Node layer recieves a request from UI. This is used till the call is made to API. Data is entered to a file asynchronously with each call.
-
-Events are thrown are:
-* Node Call Initiated : When the call reaches the express server
-* API Call Initiated : When axios calls an external endpoint.
-* API Call Completed : When axios successfully completes a call.
-* API Call Failed : When axios call fails.
-* Node Call Completed : When express successfully returns data.
-* Node Call Failed : When express sends an error back.
-
-2. Action Retrieval : An action is defined as every call that comes from UI to Node. This involves a NODE_INITIATED, several API_INITIATED, API_COMPLETEs and a NODE_COMPLETE. A trace id is unique for an action.
