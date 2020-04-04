@@ -16,8 +16,8 @@ const successHandler = response => {
   completeAPIAction(response);
   return response;
 };
-function axiosInterceptor(axios) {
-  const axiosInstance = axios.create();
+function axiosInterceptor(axios,axiosConfig={}) {
+  const axiosInstance = axios.create(axiosConfig);
   axiosInstance.interceptors.request.use(request => requestHandler(request));
   axiosInstance.interceptors.response.use(
     response => successHandler(response),

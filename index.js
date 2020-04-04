@@ -9,4 +9,12 @@ function Hera(app,axios,config){
   })
   return axios;
 }
-module.exports = Hera;
+
+function attachHeraToExpress(app){
+  app.use(heraInterceptor);
+}
+function attachHeraToAxios(axios,extraAxiosConfig){
+  axios = axiosInterceptor(axios,extraAxiosConfig)
+  return axios;
+}
+module.exports = {Hera,attachHeraToExpress,attachHeraToAxios};

@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const Hera = require("../");
+const { Hera } = require("../");
 const port = 3000;
 let axios = require("axios");
-axios = Hera(app, axios,{dev:true});
+axios = Hera(app, axios, { dev: true ,historyLimit:0});
 
 app.get("/", (req, res) => res.send("Hello World!"));
 app.get("/site", (req, res) => {

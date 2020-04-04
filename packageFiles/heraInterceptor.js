@@ -1,23 +1,36 @@
-
-let {registerNodeAction,completeNodeAction,errorNodeAction} = require('./register');
+let {
+  registerNodeAction,
+  completeNodeAction,
+  errorNodeAction
+} = require("./register");
 const heraInterceptor = (req, res, next) => {
+  try {
     registerNodeAction(req);
-    let oldResponseSender=res.send;
-    res.send=function(data){
-      if(!data){
-        data={}
-      }
-      if(res.statusCode===200){
-        completeNodeAction(req,res,data);
-      }
-      else{
-        errorNodeAction(req,res,data);
-      }
-      res.send=oldResponseSender;
-      oldResponseSender.apply(res,arguments);
+  } catch (e) {
+    console.error("Hera Error | Registering Node Initiated Action | ", e);
+  }
+  let oldResponseSender = res.send;
+  res.send = function(data) {
+    if (!data) {
+      data = {};
     }
-    next();
+    if (res.statusCode === 200) {
+      try {
+        completeNodeAction(req, res, data);
+      } catch (e) {
+        console.error("Hera Error | Registering Node Complete Action | ", e);
+      }
+    } else {
+      try {
+        errorNodeAction(req, res, data);
+      } catch (e) {
+        console.error("Hera Error | Registering Node Error Action | ", e);
+      }
+    }
+    res.send = oldResponseSender;
+    oldResponseSender.apply(res, arguments);
   };
-  
-  module.exports = heraInterceptor;
-  
+  next();
+};
+
+module.exports = heraInterceptor;

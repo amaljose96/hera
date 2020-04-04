@@ -14,6 +14,9 @@ function registerNodeAction(expressRequest) {
   addEntry(traceId, "NODE_INITIATED", method, url, headers, request);
 }
 function initiateAPIAction(axiosRequest) {
+  if(!axiosRequest.sourceRequest){
+    return;
+  }
   let { traceId, method, url, headers, request } = axiosRequestAdapter(
     axiosRequest
   );

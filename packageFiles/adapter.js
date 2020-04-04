@@ -36,11 +36,21 @@ function axiosResponseAdapter(axiosResponse) {
   };
 }
 function axiosErrorAdapter(errorResponse) {
-  let request = {
-    body: errorResponse.config.body,
-    query: errorResponse.config.query,
-    data: errorResponse.config.data
-  };
+  let request = {}
+  if(errorResponse.response){
+    request={
+      body: errorResponse.response.body,
+      query: errorResponse.response.query,
+      data: errorResponse.response.data
+    }
+  }
+  else if(errorResponse.config){
+    request={
+      body: errorResponse.config.body,
+      query: errorResponse.config.query,
+      data: errorResponse.config.data
+    }
+  }
   let errorCode = errorResponse.code;
   let errorMessage = errorResponse.message;
   if (errorResponse.response) {

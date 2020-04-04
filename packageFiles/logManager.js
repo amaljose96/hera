@@ -1,8 +1,23 @@
-let writeBatchToFile=require("./batchWriter");
+let writeBatchToFile = require("./batchWriter");
 let logBuffer = [];
 
 function getTime() {
-  return new Date().toISOString();
+  let date = new Date();
+  return (
+    date.getFullYear() +
+    "-" +
+    date.getMonth() +
+    "-" +
+    date.getDate() +
+    " " +
+    date.getHours() +
+    ":" +
+    date.getMinutes() +
+    ":" +
+    date.getSeconds() +
+    ":" +
+    date.getMilliseconds()
+  );
 }
 
 function addEntry(
@@ -43,11 +58,11 @@ function addEntry(
 }
 
 function getIndexString(time) {
-  let segments = time.split(".")[0].split(":");
-  let minute = segments[1];
-  let second = segments[2];
-  let hour = segments[0].split("T")[1];
-  let day = time.split("T")[0].split("-")[2];
+  let segments = time.split(" ")
+  let minute = segments[1].split(":")[1];
+  let second = segments[1].split(":")[2];
+  let hour = segments[1].split(":")[0];
+  let day = segments[0].split("-")[2];
   return day + "_" + hour + ":" + minute + "_" + second;
 }
 
@@ -85,13 +100,16 @@ function flushBufferToFile() {
     }
   });
   if (Object.keys(formattedLogs).length === 0) {
-    console.log("No logs recorded.");
     return;
   }
   let flushableLogs = {};
   let flushableTraceIds = [];
   Object.values(formattedLogs).forEach(action => {
-    if (action.logs["NODE_COMPLETE"] || action.logs["NODE_FAILED"]) {
+    if (!action.logs["NODE_INITIATED"]) {
+      console.log("Headless call detected - ", action.traceId);
+      flushableTraceIds.push(action.traceId);
+    }
+    else if (action.logs["NODE_COMPLETE"] || action.logs["NODE_FAILED"]) {
       action.endTime = (
         action.logs["NODE_COMPLETE"] || action.logs["NODE_FAILED"]
       ).time;
@@ -106,8 +124,20 @@ function flushBufferToFile() {
       }
       flushableTraceIds.push(action.traceId);
     }
+    else{
+      let life=Date.now()-action.logs["NODE_INITIATED"].accurateTime;
+      let allowedLife = process.env.HERA_callLife || 10800000;
+      if(life>allowedLife){
+        console.log("Long call detected - ",action.traceId);
+        flushableTraceIds.push(action.traceId);
+      }
+    }
   });
+  if(flushableLogs.length===0){
+    return;
+  }
   writeLogToFile(flushableLogs);
+  console.log(flushableTraceIds.length+" logs were flushed");
   let newBuffer = logBuffer.filter(log => {
     return !flushableTraceIds.includes(log.traceId);
   });
