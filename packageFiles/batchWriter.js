@@ -8,13 +8,13 @@ function writeBatchToFile(fileName, batch) {
       fs.writeFile(
         logPath + "/" + fileName + ".json",
         JSON.stringify(batch, null, 2),
-        (err) => {
-          if(err){
-            console.error("Failed to write file at ",
-            process.cwd() + "/" + logPath + "/" + fileName + ".json")
-          }
-          else{
-
+        err => {
+          if (err) {
+            console.error(
+              "Failed to write file at ",
+              process.cwd() + "/" + logPath + "/" + fileName + ".json"
+            );
+          } else {
             console.log(
               "Log file created successfully at ",
               process.cwd() + "/" + logPath + "/" + fileName + ".json"
@@ -37,13 +37,13 @@ function writeBatchToFile(fileName, batch) {
       fs.writeFile(
         logPath + "/" + fileName + ".json",
         JSON.stringify(existingLog, null, 2),
-        (err) => {
-          if(err){
-            console.error("Failed to write file at ",
-            process.cwd() + "/" + logPath + "/" + fileName + ".json")
-          }
-          else{
-
+        err => {
+          if (err) {
+            console.error(
+              "Failed to write file at ",
+              process.cwd() + "/" + logPath + "/" + fileName + ".json"
+            );
+          } else {
             console.log(
               "Log file updated successfully at ",
               process.cwd() + "/" + logPath + "/" + fileName + ".json"
