@@ -1,0 +1,16 @@
+{
+  "name": "hera-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test-hera": "npm install ..;node index.js —-inspect"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "hera": "file:.."
+  }
+}
