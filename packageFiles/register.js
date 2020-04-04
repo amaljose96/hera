@@ -5,28 +5,7 @@ let {
   axiosResponseAdapter,
   axiosErrorAdapter
 } = require("./adapter");
-function addEntry(
-  traceId,
-  type,
-  method,
-  url,
-  headers,
-  request,
-  responseCode,
-  response
-) {
-  console.log(
-    traceId,
-    " : ",
-    type,
-    " | ",
-    method,
-    " ",
-    url,
-    " | ",
-    responseCode
-  );
-}
+let addEntry = require("./logManager")
 
 function registerNodeAction(expressRequest) {
   let { method, url, headers, request } = expressRequestAdapter(expressRequest);
