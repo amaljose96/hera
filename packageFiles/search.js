@@ -72,48 +72,53 @@ function searchController(request, response) {
     });
   });
 }
-function satisfiesSearchParameters(searchParameters,action){
-    if(searchParameters.urlKeyword){
-        return Object.keys(action.logs).some(type=>{
-           return action.logs[type].url.includes(searchParameters.urlKeyword)
-        })
+function satisfiesSearchParameters(searchParameters, action) {
+  if (searchParameters.urlKeyword) {
+    return Object.keys(action.logs).some(type => {
+      return action.logs[type].url.includes(searchParameters.urlKeyword);
+    });
+  }
+  if (searchParameters.traceId) {
+    return action.traceId === searchParameters.traceId;
+  }
+  return true;
+}
+function formatAction(action, searchParameters) {
+  let simplifiedLogs = {};
+  Object.keys(action.logs).forEach(type => {
+    let simplifiedLog = action.logs[type];
+    if (!searchParameters.traceId) {
+      simplifiedLog = {
+        accurateTime: simplifiedLog.accurateTime,
+        method: simplifiedLog.method,
+        responseCode: simplifiedLog.responseCode,
+        time: simplifiedLog.time,
+        traceId: simplifiedLog.traceId,
+        type: simplifiedLog.type,
+        url: simplifiedLog.url
+      };
     }
-    return true;
+    simplifiedLogs[type] = simplifiedLog;
+  });
+  action.logs = simplifiedLogs;
+  return action;
 }
-function formatAction(action){
-    let simplifiedLogs={};
-    Object.keys(action.logs).forEach(type=>{
-        let simplifiedLog={
-            accurateTime:action.logs[type].accurateTime,
-            method:action.logs[type].method,
-            responseCode:action.logs[type].responseCode,
-            time:action.logs[type].time,
-            traceId:action.logs[type].traceId,
-            type:action.logs[type].type,
-            url:action.logs[type].url,
-        }
-        simplifiedLogs[type]=simplifiedLog;
-    })
-    action.logs=simplifiedLogs;
-    return action;
-}
-function promisedReadFile(fileName){
-    return new Promise((resolve,reject)=>{
-        fs.readFile(fileName,(err,response)=>{
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(response);
-            }
-        })
-    })
+function promisedReadFile(fileName) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(fileName, (err, response) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(response);
+      }
+    });
+  });
 }
 async function getSearchResults(searchParameters) {
   return new Promise((resolve, reject) => {
     let possibleSearchFiles = [];
     let searchFiles = [];
-    let searchResults={};
+    let searchResults = {};
     let dateHourCursor = new Date(searchParameters.start);
     let logPath =
       process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera/logs";
@@ -129,22 +134,24 @@ async function getSearchResults(searchParameters) {
       searchFiles = files.filter(fileName => {
         return possibleSearchFiles.includes(fileName);
       });
-      let searchPromises=searchFiles.map(fileName=>{
-          return promisedReadFile(logPath + "/" + fileName).then(response=>{
-            let log = JSON.parse(response);
-            Object.keys(log).forEach(searchIndex=>{
-                let logBlock=log[searchIndex];
-                Object.keys(logBlock).forEach(traceId=>{
-                    if(satisfiesSearchParameters(searchParameters,logBlock[traceId])){
-                        searchResults[traceId]=formatAction(logBlock[traceId]);
-                    }
-                });
-            })
+      let searchPromises = searchFiles.map(fileName => {
+        return promisedReadFile(logPath + "/" + fileName).then(response => {
+          let log = JSON.parse(response);
+          Object.keys(log).forEach(searchIndex => {
+            let logBlock = log[searchIndex];
+            Object.keys(logBlock).forEach(traceId => {
+              if (
+                satisfiesSearchParameters(searchParameters, logBlock[traceId])
+              ) {
+                searchResults[traceId] = formatAction(logBlock[traceId],searchParameters);
+              }
+            });
           });
+        });
       });
-      Promise.all(searchPromises).then(()=>{
-          resolve(searchResults);
-      })
+      Promise.all(searchPromises).then(() => {
+        resolve(searchResults);
+      });
     });
   });
 }
