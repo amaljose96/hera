@@ -72,16 +72,20 @@ function searchController(request, response) {
     });
   });
 }
-function satisfiesSearchParameters(searchParameters, action) {
+function satisfiesSearchParameters(searchParameters, action, resultCount) {
+  let satisfies=true;
   if (searchParameters.urlKeyword) {
-    return Object.keys(action.logs).some(type => {
+    satisfies= Object.keys(action.logs).some(type => {
       return action.logs[type].url.includes(searchParameters.urlKeyword);
-    });
+    }) && satisfies;
   }
   if (searchParameters.traceId) {
-    return action.traceId === searchParameters.traceId;
+    satisfies= action.traceId === searchParameters.traceId && satisfies;
   }
-  return true;
+  if(searchParameters.resultsLimit){
+    satisfies = resultCount < searchParameters.resultsLimit && satisfies;
+  }
+  return satisfies;
 }
 function formatAction(action, searchParameters) {
   let simplifiedLogs = {};
@@ -141,7 +145,7 @@ async function getSearchResults(searchParameters) {
             let logBlock = log[searchIndex];
             Object.keys(logBlock).forEach(traceId => {
               if (
-                satisfiesSearchParameters(searchParameters, logBlock[traceId])
+                satisfiesSearchParameters(searchParameters, logBlock[traceId],Object.keys(searchResults).length)
               ) {
                 searchResults[traceId] = formatAction(
                   logBlock[traceId],
