@@ -1,7 +1,7 @@
 var fs = require("fs");
 function writeBatchToFile(fileName, batch) {
   let logPath =
-    process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera/logs";
+    process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera-monitor/logs";
   !fs.existsSync(logPath) && fs.mkdirSync(logPath);
   fs.readFile(logPath + "/" + fileName + ".json", (error, response) => {
     if (error) {
@@ -60,7 +60,7 @@ setInterval(() => {
 
 function cleanUp() {
   let logPath =
-    process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera/logs";
+    process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera-monitor/logs";
   let historyLimit = process.env.HERA_historyLimit || 7;
   let possibleFileNames = ["logPresence"];
   for (var day = 0; day <= historyLimit; day = day + 1) {

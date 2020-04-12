@@ -62,7 +62,10 @@ function searchParametersValidator(searchParameters) {
 function searchController(request, response) {
   let searchParameters = request.query;
   let searchParametersValidation = searchParametersValidator(searchParameters);
+  searchParameters.start=searchParameters.start - 60*1000;
+  searchParameters.end=searchParameters.end + 60*1000;
   if (searchParametersValidation !== "PASS") {
+    console.error(searchParametersValidation);
     response.status(400).send(searchParametersValidation);
   }
   getSearchResults(searchParameters).then(searchResults => {
@@ -125,7 +128,7 @@ async function getSearchResults(searchParameters) {
     let searchResults = {};
     let dateHourCursor = new Date(searchParameters.start);
     let logPath =
-      process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera/logs";
+      process.env.HERA_dev === "true" ? "logs" : "./node_modules/hera-monitor/logs";
     while (
       dateHourCursor.getTime() < new Date(searchParameters.end).getTime()
     ) {

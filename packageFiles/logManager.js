@@ -43,6 +43,9 @@ function addEntry(
     " | ",
     responseCode
   );
+  if(type.includes("API")){
+    type=type+"_"+method+"_"+url;
+  }
   logBuffer.push({
     time: getTime(),
     accurateTime: Date.now(),

@@ -8,7 +8,7 @@ axios = Hera(app, axios, { dev: true });
 app.get("/", (req, res) => res.send("Hello World!"));
 app.get("/site", (req, res) => {
   axios
-    .get("https://googlea.com", { sourceRequest: req })
+    .get("https://google.com", { sourceRequest: req })
     .then(response => {
       res.send(response.data);
     })

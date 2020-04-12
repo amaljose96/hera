@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.js": "/hera/static/js/main.9b261cce.chunk.js",
+    "main.js.map": "/hera/static/js/main.9b261cce.chunk.js.map",
+    "runtime-main.js": "/hera/static/js/runtime-main.adfa3a26.js",
+    "runtime-main.js.map": "/hera/static/js/runtime-main.adfa3a26.js.map",
+    "static/css/2.b90ce945.chunk.css": "/hera/static/css/2.b90ce945.chunk.css",
+    "static/js/2.4fdfed1c.chunk.js": "/hera/static/js/2.4fdfed1c.chunk.js",
+    "static/js/2.4fdfed1c.chunk.js.map": "/hera/static/js/2.4fdfed1c.chunk.js.map",
+    "index.html": "/hera/index.html",
+    "precache-manifest.eccf74a8f7acc66dad8288dab308ca23.js": "/hera/precache-manifest.eccf74a8f7acc66dad8288dab308ca23.js",
+    "service-worker.js": "/hera/service-worker.js",
+    "static/css/2.b90ce945.chunk.css.map": "/hera/static/css/2.b90ce945.chunk.css.map",
+    "static/js/2.4fdfed1c.chunk.js.LICENSE.txt": "/hera/static/js/2.4fdfed1c.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.adfa3a26.js",
+    "static/css/2.b90ce945.chunk.css",
+    "static/js/2.4fdfed1c.chunk.js",
+    "static/js/main.9b261cce.chunk.js"
+  ]
+}
